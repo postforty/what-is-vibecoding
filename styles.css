@@ -81,30 +81,10 @@ html, body {
 }
 
 /* ==========================================================================
-   하단 조작 및 안내 도구 (전체화면, 힌트, 카운터)
+   하단 조작 및 안내 도구 (화면에서 항상 숨김 처리)
    ========================================================================== */
 .ui-bar {
-  position: fixed;
-  bottom: 20px;
-  left: 0;
-  right: 0;
-  padding: 0 28px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  pointer-events: none;
-  z-index: 900;
-  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
-}
-
-.ui-bar.hidden {
-  opacity: 0;
-  transform: translateY(12px);
-  pointer-events: none;
-}
-
-.ui-bar.hidden * {
-  pointer-events: none !important;
+  display: none !important;
 }
 
 .ui-left, .ui-center, .ui-right {
