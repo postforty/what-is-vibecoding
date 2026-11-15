@@ -1,0 +1,873 @@
+/* ==========================================================================
+   Playful 테마 - make-slide 스타일
+   따뜻하고 친근한 파스텔 톤과 둥근 모서리, 부드러운 탄성 애니메이션 디자인
+   ========================================================================== */
+
+/* 웹폰트 불러오기 (프리텐다드 및 JetBrains Mono) */
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap");
+
+/* 기본 색상 및 디자인 변수 설정 */
+:root {
+  /* 배경 및 표면 */
+  --bg: #fef7f0;
+  --surface: #ffffff;
+  --surface-soft: #fff9f4;
+  
+  /* 본문 글자 색상 */
+  --text-primary: #2d2d2d;
+  --text-secondary: #6e6e6e;
+  --text-muted: #999999;
+
+  /* 파스텔 포인트 색상 */
+  --accent-coral: #ff6b6b;
+  --accent-mint: #51cf66;
+  --accent-sky: #74c0fc;
+  --accent-lavender: #cc5de8;
+  --accent-yellow: #ffd43b;
+  --accent-peach: #ffa94d;
+
+  /* 경계선 및 반경 */
+  --border: #f0e0d0;
+  --border-light: #fbeee2;
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+
+  /* 뽀송한 그림자 */
+  --shadow-sm: 0 4px 14px rgba(210, 140, 110, 0.08);
+  --shadow-md: 0 10px 28px rgba(210, 140, 110, 0.12);
+  --shadow-lg: 0 16px 40px rgba(210, 140, 110, 0.16);
+
+  /* 탄성 애니메이션 */
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* 기본 초기화 */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg);
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+  color: var(--text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==========================================================================
+   상단 무지개 진행 상태 바
+   ========================================================================== */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 5px;
+  width: 10%;
+  background: linear-gradient(90deg, var(--accent-coral), var(--accent-peach), var(--accent-yellow), var(--accent-mint), var(--accent-sky), var(--accent-lavender));
+  transition: width 0.4s var(--spring);
+  z-index: 1000;
+  border-radius: 0 4px 4px 0;
+  box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+}
+
+/* ==========================================================================
+   하단 조작 및 안내 도구 (전체화면, 힌트, 카운터)
+   ========================================================================== */
+.ui-bar {
+  position: fixed;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  padding: 0 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+  z-index: 900;
+}
+
+.ui-left, .ui-center, .ui-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  pointer-events: auto;
+}
+
+/* 동글동글한 아이콘 버튼 */
+.icon-btn {
+  height: 42px;
+  min-width: 42px;
+  padding: 0 16px;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.25s var(--spring), background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.icon-btn:hover {
+  transform: translateY(-2px) scale(1.04);
+  background: var(--surface-soft);
+  border-color: var(--accent-coral);
+  color: var(--accent-coral);
+}
+
+.icon-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* 중앙 단축키 안내 캡슐 */
+.key-hint {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+
+.key-hint:hover {
+  opacity: 1;
+}
+
+.key-hint kbd {
+  display: inline-block;
+  padding: 2px 7px;
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--accent-coral);
+}
+
+/* 슬라이드 번호 카운터 */
+.slide-counter {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.slide-counter .current-num {
+  color: var(--accent-coral);
+}
+
+/* ==========================================================================
+   슬라이드 전체 무대 (Stage)
+   ========================================================================== */
+.deck-wrapper {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.slides-stage {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 64px 80px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  background-color: var(--bg);
+  overflow-y: auto;
+  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
+}
+
+.slide.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  z-index: 10;
+}
+
+/* 슬라이드 내부 요소 퐁퐁 떠오르는 탄성 애니메이션 */
+@keyframes bounceInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(22px) scale(0.97);
+  }
+  60% {
+    transform: translateY(-4px) scale(1.01);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.slide.active .a {
+  opacity: 0;
+  animation: bounceInUp 0.55s var(--spring) forwards;
+}
+
+.slide.active .a:nth-child(1) { animation-delay: 0.05s; }
+.slide.active .a:nth-child(2) { animation-delay: 0.12s; }
+.slide.active .a:nth-child(3) { animation-delay: 0.19s; }
+.slide.active .a:nth-child(4) { animation-delay: 0.26s; }
+.slide.active .a:nth-child(5) { animation-delay: 0.33s; }
+.slide.active .a:nth-child(6) { animation-delay: 0.40s; }
+
+/* 슬라이드 내부 메인 컨테이너 */
+.slide-content-box {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ==========================================================================
+   헤더 (제목 및 알약 태그)
+   ========================================================================== */
+.slide-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.slide-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  background: rgba(255, 107, 107, 0.12);
+  color: var(--accent-coral);
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 16px;
+}
+
+.slide-header h2 {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 무지개 그라데이션 타이틀 */
+.gradient-title {
+  background: linear-gradient(135deg, var(--accent-coral) 0%, var(--accent-lavender) 50%, var(--accent-sky) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 말풍선 강조 박스 (Callout) */
+.callout {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 6px solid var(--accent-coral);
+  padding: 16px 22px;
+  border-radius: var(--radius-md);
+  font-size: 19px;
+  font-weight: 500;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+  line-height: 1.55;
+  margin-bottom: 4px;
+}
+
+.callout strong {
+  color: var(--accent-coral);
+}
+
+.callout.mint-border {
+  border-left-color: var(--accent-mint);
+}
+.callout.mint-border strong {
+  color: #2b9348;
+}
+
+.callout.sky-border {
+  border-left-color: var(--accent-sky);
+}
+.callout.sky-border strong {
+  color: #1971c2;
+}
+
+/* 알약 배지 태그 (Pill Tags) */
+.pill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  color: var(--text-primary);
+}
+
+.pill-tag.coral { background: rgba(255, 107, 107, 0.12); color: var(--accent-coral); border-color: rgba(255, 107, 107, 0.25); }
+.pill-tag.mint { background: rgba(81, 207, 102, 0.12); color: #2b9348; border-color: rgba(81, 207, 102, 0.25); }
+.pill-tag.sky { background: rgba(116, 192, 252, 0.12); color: #1971c2; border-color: rgba(116, 192, 252, 0.25); }
+.pill-tag.lavender { background: rgba(204, 93, 232, 0.12); color: #9c36b5; border-color: rgba(204, 93, 232, 0.25); }
+.pill-tag.yellow { background: rgba(255, 212, 59, 0.18); color: #b8860b; border-color: rgba(255, 212, 59, 0.35); }
+
+/* ==========================================================================
+   2열 레이아웃 & 클레이 아트 이미지 스타일
+   ========================================================================== */
+.two-col-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 28px;
+  align-items: center;
+  width: 100%;
+}
+
+.col-text {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.col-media {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 클레이 이미지 액자 (둥근 테두리 + 그림자) */
+.clay-card {
+  width: 100%;
+  max-width: 440px;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: var(--surface);
+  border: 4px solid var(--surface);
+  box-shadow: var(--shadow-lg);
+  transition: transform 0.35s var(--spring), box-shadow 0.35s ease;
+}
+
+.clay-card:hover {
+  transform: translateY(-6px) rotate(1deg);
+  box-shadow: 0 20px 48px rgba(210, 140, 110, 0.22);
+}
+
+.clay-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  border-radius: calc(var(--radius-xl) - 4px);
+}
+
+/* ==========================================================================
+   표지 슬라이드 (Cover Slide)
+   ========================================================================== */
+.cover-layout .cover-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  box-shadow: var(--shadow-sm);
+  width: fit-content;
+}
+
+.cover-title {
+  font-size: 56px;
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -1.5px;
+  color: var(--text-primary);
+}
+
+.cover-title .sub-en {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--accent-coral);
+  margin-left: 8px;
+}
+
+.cover-subtitle {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.tag-list {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+/* ==========================================================================
+   목차 슬라이드 (Agenda)
+   ========================================================================== */
+.agenda-cards {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.agenda-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.3s var(--spring), box-shadow 0.3s ease, border-color 0.2s ease;
+}
+
+.agenda-card:hover {
+  transform: translateY(-8px) rotate(-1deg);
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent-coral);
+}
+
+.agenda-num {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.agenda-card:nth-child(1) .agenda-num { background: rgba(255, 107, 107, 0.15); color: var(--accent-coral); }
+.agenda-card:nth-child(2) .agenda-num { background: rgba(255, 212, 59, 0.2); color: #b8860b; }
+.agenda-card:nth-child(3) .agenda-num { background: rgba(81, 207, 102, 0.15); color: #2b9348; }
+.agenda-card:nth-child(4) .agenda-num { background: rgba(116, 192, 252, 0.15); color: #1971c2; }
+.agenda-card:nth-child(5) .agenda-num { background: rgba(204, 93, 232, 0.15); color: #9c36b5; }
+
+.agenda-card strong {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.agenda-card p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   귀여운 카드 & 그리드 (Playful Cards)
+   ========================================================================== */
+.card-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  width: 100%;
+}
+
+.card-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  width: 100%;
+}
+
+.card-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  width: 100%;
+}
+
+.fun-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform 0.3s var(--spring), box-shadow 0.3s ease;
+}
+
+.fun-card:hover {
+  transform: translateY(-5px) rotate(-0.5deg);
+  box-shadow: var(--shadow-md);
+}
+
+.fun-card.highlight {
+  border-color: rgba(255, 107, 107, 0.3);
+  background: linear-gradient(180deg, #ffffff 0%, var(--surface-soft) 100%);
+}
+
+.card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.card-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.card-icon {
+  font-size: 28px;
+}
+
+.fun-card h3 {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.fun-card p {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* 카드 목록 리스트 */
+.playful-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.playful-list li {
+  position: relative;
+  padding-left: 24px;
+  font-size: 15px;
+  color: var(--text-primary);
+  line-height: 1.55;
+}
+
+.playful-list li::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 9px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--accent-coral);
+}
+
+.playful-list li:nth-child(2)::before { background: var(--accent-peach); }
+.playful-list li:nth-child(3)::before { background: var(--accent-mint); }
+.playful-list li:nth-child(4)::before { background: var(--accent-sky); }
+
+/* ==========================================================================
+   부드러운 테이블 디자인 (Playful Table)
+   ========================================================================== */
+.table-wrap {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.playful-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.playful-table th,
+.playful-table td {
+  padding: 16px 20px;
+  font-size: 15px;
+  line-height: 1.5;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.playful-table th {
+  background: var(--surface-soft);
+  color: var(--text-secondary);
+  font-weight: 700;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.playful-table tr:last-child td {
+  border-bottom: none;
+}
+
+.playful-table tr:hover td {
+  background: rgba(255, 107, 107, 0.02);
+}
+
+.playful-table td strong {
+  color: var(--text-primary);
+}
+
+.playful-table .accent-cell {
+  background: rgba(81, 207, 102, 0.06);
+  font-weight: 700;
+  color: #2b9348;
+}
+
+/* ==========================================================================
+   비교 (Before vs After) 카드
+   ========================================================================== */
+.compare-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  width: 100%;
+}
+
+.compare-card {
+  border-radius: var(--radius-lg);
+  padding: 22px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.compare-card.before {
+  background: #fffafa;
+  border-color: rgba(255, 107, 107, 0.25);
+}
+
+.compare-card.after {
+  background: #f7fcf8;
+  border-color: rgba(81, 207, 102, 0.3);
+}
+
+.compare-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.compare-card.before .compare-title { color: var(--accent-coral); }
+.compare-card.after .compare-title { color: #2b9348; }
+
+/* ==========================================================================
+   실전 요령 4개 번호 카드 (Tips Grid)
+   ========================================================================== */
+.tip-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 22px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.3s var(--spring), box-shadow 0.3s ease;
+}
+
+.tip-item:hover {
+  transform: translateY(-6px) rotate(-1deg);
+  box-shadow: var(--shadow-md);
+}
+
+.tip-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tip-badge {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.tip-item:nth-child(1) .tip-badge { background: rgba(255, 107, 107, 0.15); color: var(--accent-coral); }
+.tip-item:nth-child(2) .tip-badge { background: rgba(255, 212, 59, 0.2); color: #b8860b; }
+.tip-item:nth-child(3) .tip-badge { background: rgba(81, 207, 102, 0.15); color: #2b9348; }
+.tip-item:nth-child(4) .tip-badge { background: rgba(116, 192, 252, 0.15); color: #1971c2; }
+
+.tip-item h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.tip-item p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+/* ==========================================================================
+   마무리 슬라이드 (Closing)
+   ========================================================================== */
+.closing-box {
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 28px 24px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.closing-emoji {
+  font-size: 44px;
+}
+
+.closing-box h3 {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--accent-coral);
+}
+
+.closing-box p {
+  font-size: 16px;
+  color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   반응형 및 화면 크기 대응
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .slide {
+    padding: 36px 32px 70px;
+  }
+  .two-col-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .agenda-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .card-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .cover-title {
+    font-size: 44px;
+  }
+  .slide-header h2 {
+    font-size: 28px;
+  }
+}
+
+/* ==========================================================================
+   인쇄 및 PDF 내보내기 대응 (Print Spec)
+   ========================================================================== */
+@media print {
+  .progress-bar,
+  .ui-bar,
+  .icon-btn,
+  .key-hint,
+  .slide-counter {
+    display: none !important;
+  }
+
+  html, body {
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+  }
+
+  .deck-wrapper,
+  .slides-stage {
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .slide {
+    position: relative !important;
+    inset: auto !important;
+    width: 100vw !important;
+    min-height: 100vh !important;
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    page-break-after: always !important;
+    page-break-inside: avoid !important;
+    padding: 40px !important;
+  }
+
+  .slide.active .a,
+  .a {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  @page {
+    size: landscape;
+    margin: 0;
+  }
+}
