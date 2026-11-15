@@ -9,6 +9,7 @@
   let notesWindow = null;
 
   // UI 요소 참조
+  const uiBar = document.querySelector('.ui-bar');
   const progressBar = document.getElementById('progressBar');
   const slideCounter = document.getElementById('slideCounter');
   const prevBtn = document.getElementById('prevBtn');
@@ -267,6 +268,25 @@
       goTo(targetIndex);
     }
   });
+
+  // 마우스 미동작 시 하단 메뉴 자동 숨김 (약 2.5초 뒤 숨김)
+  let hideTimer = null;
+  function resetHideTimer() {
+    if (!uiBar) return;
+    uiBar.classList.remove('hidden');
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => {
+      uiBar.classList.add('hidden');
+    }, 2500);
+  }
+
+  // 마우스를 움직이거나 화면을 터치/클릭하면 하단 바를 다시 표시
+  document.addEventListener('mousemove', resetHideTimer);
+  document.addEventListener('touchstart', resetHideTimer, { passive: true });
+  document.addEventListener('keydown', resetHideTimer);
+
+  // 초기 시작 시 타이머 동작
+  resetHideTimer();
 
   // 초기 시작
   goTo(getInitialIndex());

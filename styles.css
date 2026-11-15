@@ -94,6 +94,17 @@ html, body {
   align-items: center;
   pointer-events: none;
   z-index: 900;
+  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
+}
+
+.ui-bar.hidden {
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+}
+
+.ui-bar.hidden * {
+  pointer-events: none !important;
 }
 
 .ui-left, .ui-center, .ui-right {
